@@ -13,43 +13,30 @@
 
     
      tasks:
-      - name: Download MySQL Community Repo
-        get_url:
-         url: http://repo.mysql.com/mysql-community-release-el7-7.noarch.rpm
-         dest: /tmp
-
       - name: Install MySQL Community Repo
         yum:
          name: /tmp/mysql-community-release-el7-7.noarch.rpm
          state: present
 
-      - name: Installing Apache in centOS
+      - name: Installing Apache, Mysql, php in centOS
         yum:
-         name: httpd
+         name: "{{ packages }}"
          state: latest
-      - name: Ensure apache is running
+
+      - name: Ensure httpd is running
         service:
          name: httpd
          state: started
-      - name: Install php in centos
-        yum:
-         name: php
-         state: latest
-      - name: Install php-mysql in centos
-        yum:
-         name: php-mysql
-         state: latest
 
-      - name: Install MYSQL-server in centos
-        yum:
-         name: mysql-server
-         state: latest
+      - name: Ensure php is running
+        service:
+         name: httpd
+         state: started
+
+
+
       - name: Open port 8090 in Firewalld
         firewalld:
          port: 8090/tcp
          permanent: yes
-         immediate: yes
          state: enabled
-      - name: show php installed via apache
-        shell:
-         cmd: echo "<?php phpinfo();?>"> /var/www/html/index.php
