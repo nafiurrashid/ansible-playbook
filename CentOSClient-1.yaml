@@ -3,7 +3,15 @@
      hosts: 192.168.56.107
      become: yes
      become_user: root
-     vars:    
+     vars:
+      packages:
+        -httpd
+        -php
+        -php-mysql
+        -mysql-server
+      
+
+    
      tasks:
       - name: Download MySQL Community Repo
         get_url:
