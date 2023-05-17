@@ -5,14 +5,22 @@
      become_user: root
      vars:
       packages:
-        -httpd
-        -php
-        -php-mysql
-        -mysql-server
-      
+        - httpd
+        - php
+        - php-mysql
+        - mysql-server
+      services:
+        - httpd
+        - mysqld
 
-    
+
+
      tasks:
+      - name: Download MySQL Community Repo
+        get_url:
+         url: http://repo.mysql.com/mysql-community-release-el7-7.noarch.rpm
+         dest: /tmp
+
       - name: Install MySQL Community Repo
         yum:
          name: /tmp/mysql-community-release-el7-7.noarch.rpm
@@ -23,20 +31,12 @@
          name: "{{ packages }}"
          state: latest
 
-      - name: Ensure httpd is running
+      - name: Ensure Apache, Mysql, php is running
         service:
-         name: httpd
+         name: "{{ services }}"
          state: started
-
-      - name: Ensure php is running
-        service:
-         name: httpd
-         state: started
-
-
 
       - name: Open port 8090 in Firewalld
         firewalld:
          port: 8090/tcp
          permanent: yes
-         state: enabled
