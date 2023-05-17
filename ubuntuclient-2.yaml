@@ -46,7 +46,7 @@
         update_cache: yes
 
 
- - name: Install MySQL
+    - name: Install MySQL
       apt:
         name: mysql-server
         state: present
@@ -70,7 +70,7 @@
       copy:
         src: /root/website/ansible-playground/default
         dest: /etc/nginx/sites-available/default
- - name: Copy Nginx sites-available file
+    - name: Copy Nginx sites-available file
       copy:
         src: /root/website/ansible-playground/default
         dest: /etc/nginx/sites-available/default
