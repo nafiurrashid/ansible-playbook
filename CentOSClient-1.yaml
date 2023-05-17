@@ -3,11 +3,32 @@
      hosts: 192.168.56.107
      become: yes
      become_user: root
+     vars:
+      package_apache: 
+        name: httpd
+        state: latest
+      apache_check:
+        name: httpd
+        state: started
+      php_package:
+        name: php
+        state: latest
+      mysql_package:
+        name: mysql
+        state: latest
+      firewall_config:
+        port: 8090/tcp
+        permanent: yes
+        immediate: yes
+        state: enabled
+        
+
+    
      tasks:
       - name: Installing Apache in centOS
         yum:
-         name: httpd
-         state: latest
+         name: "{{ package_apache.name }}"
+         state: "{{ package_apache.state }}"
       - name: Ensure apache is running
         service:
          name: httpd
