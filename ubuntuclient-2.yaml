@@ -1,7 +1,23 @@
 ---
 - name: Install and configure nginx, php and database
-  hosts: 192.168.**.***
+  hosts: 192.168.56.108
   become: true
+  vars:
+    packages:
+          - php7.4-mysql
+          - php7.4-curl
+          - php7.4-json
+          - php7.4-cgi
+          - php7.4-xsl
+          - php7.4-cgi
+          - php7.4-gd
+          - php7.4-mbstring
+          - php7.4-zip
+          - php7.4-xmlrpc
+          - php7.4-soap
+          - php7.4-intl
+          - libapache2-mod-php
+
 
   tasks:
     - name: Installing Nginx
@@ -23,22 +39,9 @@
     - name: Installation PHP 7.4
       apt: name=php7.4 state=present
 
-    - name: install lamp stack
+    - name: install lamp stack packages
       apt:
-        pkg:
-          - php7.4-mysql
-          - php7.4-curl
-          - php7.4-json
-          - php7.4-cgi
-          - php7.4-xsl
-          - php7.4-cgi
-          - php7.4-gd
-          - php7.4-mbstring
-          - php7.4-zip
-          - php7.4-xmlrpc
-          - php7.4-soap
-          - php7.4-intl
-          - libapache2-mod-php
+        pkg: "{{ packages }}"
         state: present
         update_cache: yes
 
