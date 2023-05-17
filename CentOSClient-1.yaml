@@ -9,6 +9,7 @@
         - php
         - php-mysql
         - mysql-server
+             
       services:
         - httpd
         - mysqld
@@ -33,10 +34,12 @@
 
       - name: Ensure Apache, Mysql, php is running
         service:
-         name: "{{ services }}"
+         name: "{{ item }}"
          state: started
+        with_items: "{{ services }}"
 
       - name: Open port 8090 in Firewalld
         firewalld:
          port: 8090/tcp
          permanent: yes
+         state: enabled
