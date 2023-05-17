@@ -1,0 +1,31 @@
+---
+   - name: Install LAMP in clients practice
+     hosts: 192.168.56.107
+     become: yes
+     become_user: root
+     tasks:
+      - name: Installing Apache in centOS
+        yum:
+         name: httpd
+         state: latest
+      - name: Ensure apache is running
+        service:
+         name: httpd
+         state: started
+      - name: Install php in centos
+        yum:
+         name: php
+         state: latest
+      - name: Install MYSQL in centos
+        yum:
+         name: mysql
+         state: latest
+      - name: Open port 8090 in Firewalld
+        firewalld:
+         port: 8090/tcp
+         permanent: yes
+         immediate: yes
+         state: enabled
+      - name: show php installed via apache
+        shell:
+         cmd: echo "<?php phpinfo();?>"> /var/www/html/index.php
