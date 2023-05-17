@@ -3,32 +3,22 @@
      hosts: 192.168.56.107
      become: yes
      become_user: root
-     vars:
-      package_apache: 
-        name: httpd
-        state: latest
-      apache_check:
-        name: httpd
-        state: started
-      php_package:
-        name: php
-        state: latest
-      mysql_package:
-        name: mysql
-        state: latest
-      firewall_config:
-        port: 8090/tcp
-        permanent: yes
-        immediate: yes
-        state: enabled
-        
-
-    
+     vars:    
      tasks:
+      - name: Download MySQL Community Repo
+        get_url:
+         url: http://repo.mysql.com/mysql-community-release-el7-7.noarch.rpm
+         dest: /tmp
+
+      - name: Install MySQL Community Repo
+        yum:
+         name: /tmp/mysql-community-release-el7-7.noarch.rpm
+         state: present
+
       - name: Installing Apache in centOS
         yum:
-         name: "{{ package_apache.name }}"
-         state: "{{ package_apache.state }}"
+         name: httpd
+         state: latest
       - name: Ensure apache is running
         service:
          name: httpd
@@ -37,9 +27,14 @@
         yum:
          name: php
          state: latest
-      - name: Install MYSQL in centos
+      - name: Install php-mysql in centos
         yum:
-         name: mysql
+         name: php-mysql
+         state: latest
+
+      - name: Install MYSQL-server in centos
+        yum:
+         name: mysql-server
          state: latest
       - name: Open port 8090 in Firewalld
         firewalld:
